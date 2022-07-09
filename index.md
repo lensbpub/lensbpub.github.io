@@ -1,37 +1,60 @@
-## Welcome to GitHub Pages
+---
+title: "week2_basic"
+author: "Aaron"
+date: "9/7/2022"
+output: html_document
+---
 
-You can use the [editor on GitHub](https://github.com/lensbpub/lensbpub.github.io/edit/main/index.md) to maintain and preview the content for your website in Markdown files.
-
-Whenever you commit to this repository, GitHub Pages will run [Jekyll](https://jekyllrb.com/) to rebuild the pages in your site, from the content in your Markdown files.
-
-### Markdown
-
-Markdown is a lightweight and easy-to-use syntax for styling your writing. It includes conventions for
-
-```markdown
-Syntax highlighted code block
-
-# Header 1
-## Header 2
-### Header 3
-
-- Bulleted
-- List
-
-1. Numbered
-2. List
-
-**Bold** and _Italic_ and `Code` text
-
-[Link](url) and ![Image](src)
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
 ```
 
-For more details see [Basic writing and formatting syntax](https://docs.github.com/en/github/writing-on-github/getting-started-with-writing-and-formatting-on-github/basic-writing-and-formatting-syntax).
+## App
+```{r}
+    library(leaflet)
+    my_map <- leaflet() %>%
+        addTiles()
+```
 
-### Jekyll Themes
+## Let's add some markers
+```{r}
+    my_map <- my_map %>%
+        addMarkers(lat=3.194220, lng=101.736800, popup="Example")
+        my_map
+```
 
-Your Pages site will use the layout and styles from the Jekyll theme you have selected in your [repository settings](https://github.com/lensbpub/lensbpub.github.io/settings/pages). The name of this theme is saved in the Jekyll `_config.yml` configuration file.
+## More markers
+```{r}
+    set.seed(42)
+    df <- data.frame(lat = runif(20, min = 39.2, max=39.3), lng=runif(20,min=-76.6, max=-76.5))
+    df %>%
+        leaflet() %>%
+        addTiles() %>%
+        addMarkers()
+```
 
-### Support or Contact
+## Custom Markers
+```{r}
+    university_lat_long <- data.frame(lat=c(39.2973166,39.3288851, 39.2906617, 39.2970681, 39.2824806),
+                                      lng=c(-76.5929798, -76.6206598,-76.5479783, -76.6150537, -76.6016766))
+    university_lat_long %>%
+        leaflet() %>%
+        addTiles() %>%
+        addMarkers()
+```
 
-Having trouble with Pages? Check out our [documentation](https://docs.github.com/categories/github-pages-basics/) or [contact support](https://support.github.com/contact) and we’ll help you sort it out.
+## Multiple PopUps
+```{r}
+    sites <- c(
+        "<a hrf='http://www.jhsph.edu/'>East Campus</a>",
+        "<a href='https://apply.jhu.edu/visit/homewood/'>Homewood Campus</a>",
+        "<a href='http://www.hopkinsmedicine.org/john_hopkins_bayview/'>Bayview Medical Center</a>",
+        "<a href='http://peabody.jhu.edu/'>Peabody Institute</a>",
+        "< href='http://carey.jhu.edu/'>Carey Business School</a>"
+    )
+
+    university_lat_long %>%
+        leaflet() %>%
+        addTiles() %>%
+        addMarkers(popup=sites)
+```
